@@ -16,20 +16,26 @@ export const getAllContacts = async (req, res) => {
 export const getOneContact = async (req, res) => {
   try {
     const { id } = req.params;
-    const contacts = await contactsService.getContacts(id);
-    res.json(contacts);
+    const contact = await contactsService.getContacts(id);
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    res.json(contact);
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const deleteContact = async (req, res) => {
   try {
     const { id } = req.params;
-    const contacts = await contactsService.removeContact(id);
-    res.json(contacts);
+    const contact = await contactsService.removeContact(id);
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    res.json(contact);
   } catch (error) {
-    res.status(404).json({ message: "Not found" });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -48,7 +54,7 @@ export const createContact = async (req, res) => {
 
     if (error) {
       return res
-        .status(404)
+        .status(400)
         .json({ message: "Validation error", details: error.message });
     }
     const newContact = await contactsService.addContact({ name, email, phone });
