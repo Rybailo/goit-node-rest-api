@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
 import path from "node:path";
 import { randomUUID } from "crypto";
+import Contact from "../models/contacts.js";
 
 const contactsPath = path.resolve("db", "contacts.json");
 
