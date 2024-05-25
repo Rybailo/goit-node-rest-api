@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-const DB_URI =
-  "mongodb+srv://rybailoorest4:JjvQbo7e4ei7lGIi@cluster0.g4rgyos.mongodb.net/contacts?retryWrites=true&w=majority&appName=Cluster0";
+const DB_URI = process.env.DB_URI;
 
 mongoose
   .connect(DB_URI)
