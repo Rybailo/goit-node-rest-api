@@ -5,6 +5,7 @@ import "dotenv/config";
 
 import authRouter from "./routes/auth.js";
 import contactsRouter from "./routes/contactsRouter.js";
+import authMiddleware from "./middlewares/auth.js";
 
 import "./db/db.js";
 
@@ -15,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth/users", authRouter);
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", authMiddleware, contactsRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
