@@ -55,4 +55,16 @@ async function logout(req, res, next) {
   }
 }
 
-export default { register, login, logout };
+async function current(req, res, next) {
+  try {
+    const { email, subscription } = req.user;
+    res.json({
+      email,
+      subscription,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export default { register, login, logout, current };
