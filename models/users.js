@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
 const userSchema = new mongoose.Schema({
   password: {
@@ -14,15 +15,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ["starter", "pro", "business"],
     default: "starter",
-  } /*
+  },
   token: {
     type: String,
     default: null,
-  }, ,
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "user",
-  },*/,
+  },
 });
 
 export default mongoose.model("User", userSchema);

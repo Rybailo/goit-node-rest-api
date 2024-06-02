@@ -1,5 +1,6 @@
 import User from "../models/users.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 async function register(req, res, next) {
   try {
@@ -12,7 +13,6 @@ async function register(req, res, next) {
 
     const passwordHash = await bcrypt.hash(password, 10);
     const result = await User.create({ email, password: passwordHash });
-    console.log(result);
     res.status(201).send({ message: "User created successfully" });
   } catch (error) {
     return res
@@ -33,7 +33,12 @@ async function login(req, res, next) {
     if (isMatch === false) {
       return res.status(401).send({ message: "email or password is wrong" });
     }
-    res.send({ token: "TOKEN" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: 60 * 60,
+    });
+    await User.findByIdAndUpdate(user._id, { token }, { new: true });
+    const { subscription } = user;
+    res.send({ token, user: { email, subscription } });
   } catch (error) {
     return res
       .status(400)
@@ -41,4 +46,13 @@ async function login(req, res, next) {
   }
 }
 
-export default { register, login };
+async function logout(req, res, next) {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { token: null }, { new: true });
+    res.status(204).end();
+  } catch (error) {
+    return res.status(401).send({ message: "Not authorized" });
+  }
+}
+
+export default { register, login, logout };
