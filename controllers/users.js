@@ -15,9 +15,12 @@ async function changeAvatar(req, res, next) {
       },
       { new: true }
     );
-    res.send(user);
+    res
+      .send(user)
+      .status(201)
+      .send({ avatarURL: "тут буде посилання на зображення" });
   } catch (error) {
-    next(error);
+    return res.status(401).send({ message: "Not authorized" });
   }
 }
 
