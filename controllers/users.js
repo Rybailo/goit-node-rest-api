@@ -8,17 +8,16 @@ async function changeAvatar(req, res, next) {
       req.file.path,
       path.resolve("public", "avatars", req.file.filename)
     );
+    const avatarURL = `/avatars/${req.file.filename}`;
     const user = await User.findByIdAndUpdate(
       req.user.id,
       {
         avatar: req.file.filename,
+        avatarURL,
       },
       { new: true }
     );
-    res
-      .send(user)
-      .status(201)
-      .send({ avatarURL: "тут буде посилання на зображення" });
+    res.status(200).send({ user });
   } catch (error) {
     return res.status(401).send({ message: "Not authorized" });
   }
